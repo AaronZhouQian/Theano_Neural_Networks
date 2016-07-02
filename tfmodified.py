@@ -103,7 +103,8 @@ def init_tparams(params):
     tparams = OrderedDict()
     for kk, pp in params.items():
         tparams[kk] = theano.shared(params[kk], name=kk)
-        if kk=='lstm_b':
+        if kk=='lstm_b'
+            print("in init_tparams")
             print("lstm_b is :::")
             print (params['lstm_b'])
     return tparams
@@ -137,8 +138,6 @@ def param_init_lstm(options, params, prefix='lstm'):
     params[_p(prefix, 'U')] = U
 
     b = numpy.zeros((4 * options['dim_proj'],))
-    print("lstm_b has shape:")
-    print(b.shape)
     params[_p(prefix, 'b')] = b.astype(config.floatX)
 
     return params
