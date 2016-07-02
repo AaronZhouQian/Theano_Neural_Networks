@@ -517,13 +517,22 @@ def train_lstm(
                 print(tparams['lstm_b'].get_value())
                 print("lstm_U")
                 print(tparams['lstm_U'].get_value())
-                
+
                 # Get the data in numpy.ndarray format
                 # This swap the axis!
                 # Return something of shape (minibatch maxlen, n samples)
 
                 x, mask, y = prepare_data(x, y) # x is (maxlen x n_samples)
                                                 # the rows of x are sentences
+                print("after preparing the data")
+                print("x is")
+                print(x)
+                print("y is")
+                print(y)
+                print("mask is")
+                print(mask)
+                print("x.shape[1] is",x.shape[1])
+                
                 n_samples += x.shape[1]
 
                 cost = f_grad_shared(x, mask, y)
