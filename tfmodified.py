@@ -76,10 +76,12 @@ def init_params(options):
     """
     params = OrderedDict()
     # embedding
+    numpy.random.seed(123)
     randn = numpy.random.rand(options['n_words'], options['dim_proj'])
     params['Wemb'] = (0.01 * randn).astype(config.floatX)
     params = param_init_lstm(options, params, prefix=options['encoder'])
     # classifier
+    numpy.random.seed(123)
     params['U'] = 0.01 * numpy.random.randn(options['dim_proj'],
                                             options['ydim']).astype(config.floatX)
     params['b'] = numpy.zeros((options['ydim'],)).astype(config.floatX)
@@ -107,6 +109,7 @@ def init_tparams(params):
 
 
 def ortho_weight(ndim):
+    numpy.random.seed(123)
     W = numpy.random.randn(ndim, ndim)
     u, s, v = numpy.linalg.svd(W)
     return u.astype(config.floatX)
@@ -122,11 +125,13 @@ def param_init_lstm(options, params, prefix='lstm'):
                            ortho_weight(options['dim_proj']),
                            ortho_weight(options['dim_proj']),
                            ortho_weight(options['dim_proj'])], axis=1)
+
+
     params[_p(prefix, 'W')] = W
     U = numpy.concatenate([ortho_weight(options['dim_proj']),
-                           ortho_weight(options['dim_proj']),
-                           ortho_weight(options['dim_proj']),
-                           ortho_weight(options['dim_proj'])], axis=1)
+                       ortho_weight(options['dim_proj']),
+                       ortho_weight(options['dim_proj']),
+                       ortho_weight(options['dim_proj'])], axis=1)
     params[_p(prefix, 'U')] = U
     b = numpy.zeros((4 * options['dim_proj'],))
     params[_p(prefix, 'b')] = b.astype(config.floatX)
@@ -512,7 +517,8 @@ def train_lstm(
                 x = [train[0][t] for t in train_index]
                 print("x is: ")
                 print(x)
-                print(y)
+                print("word embedding is:")
+                print(tparams['Wemb'].get_value())
                 # Get the data in numpy.ndarray format
                 # This swap the axis!
                 # Return something of shape (minibatch maxlen, n samples)
