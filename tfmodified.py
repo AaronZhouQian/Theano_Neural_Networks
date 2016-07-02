@@ -98,19 +98,11 @@ def load_params(path, params):
 
     return params
 
-
 def init_tparams(params):
     tparams = OrderedDict()
     for kk, pp in params.items():
         tparams[kk] = theano.shared(params[kk], name=kk)
-        if kk=='lstm_b':
-            print("in init_tparams")
-            print("lstm_b is :::")
-            print (params['lstm_b'])
     return tparams
-
-
-
 
 def ortho_weight(ndim):
     numpy.random.seed(123)
@@ -338,6 +330,9 @@ def lstm_layer(tparams, state_below, options, prefix='lstm', mask=None):
 
     state_below = (tensor.dot(state_below, tparams[_p(prefix, 'W')]) +
                    tparams[_p(prefix, 'b')])
+    print("in lstm_layer")
+    print("lstm_b is ::::")
+    print(tparams['lstm_b'].get_value())
     # state_below (maxlen, n_samples, dim_proj)
     dim_proj = options['dim_proj']
     h_and_c, updates = theano.scan(_step,
