@@ -330,9 +330,6 @@ def lstm_layer(tparams, state_below, options, prefix='lstm', mask=None):
 
     state_below = (tensor.dot(state_below, tparams[_p(prefix, 'W')]) +
                    tparams[_p(prefix, 'b')])
-    print("in lstm_layer")
-    print("lstm_b is ::::")
-    print(tparams['lstm_b'].get_value())
     # state_below (maxlen, n_samples, dim_proj)
     dim_proj = options['dim_proj']
     h_and_c, updates = theano.scan(_step,
@@ -367,11 +364,8 @@ def build_model(tparams, options):
         proj = proj / mask.sum(axis=0)[:, None]
 
     pred = tensor.nnet.softmax(tensor.dot(proj, tparams['U']) + tparams['b'])
-
     f_pred_prob = theano.function([x, mask], pred, name='f_pred_prob')
     f_pred = theano.function([x, mask], pred.argmax(axis=1), name='f_pred')
-
-
 
     cost = -tensor.log(pred[tensor.arange(n_samples), y] ).mean()
 
@@ -476,7 +470,8 @@ def train_lstm(
         weight_decay *= decay_c
         cost += weight_decay
     '''
-
+    print("lstm_b is :::::")
+    print(tparams['lstm_b'].get_value())
     f_cost = theano.function([x, mask, y], cost, name='f_cost')
 
     grads = tensor.grad(cost, wrt=list(tparams.values()))
@@ -498,7 +493,8 @@ def train_lstm(
     history_errs = []
     best_p = None
     bad_count = 0
-
+    print("lstm_b is :::::::::::::::")
+    print(tparams['lstm_b'].get_value())
     uidx = 0  # the number of update done
     estop = False  # early stop
     start_time = time.time()
