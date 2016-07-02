@@ -524,14 +524,14 @@ def train_lstm(
                 cost = f_grad_shared(x, mask, y)
                 f_update(lrate)
                 print("lstm_W")
-                print(tparams['lstm_W'])
+                print(tparams['lstm_W'].get_value())
                 print("lstm_b")
-                print(tparams['lstm_b'])
+                print(tparams['lstm_b'].get_value())
                 print("lstm_U")
-                print(tparams['lstm_U'])
+                print(tparams['lstm_U'].get_value())
 
                 move_on = int(raw_input("moving on? 1/0"))
-                if move_on==False:
+                if move_on==0:
                     break
 
 
