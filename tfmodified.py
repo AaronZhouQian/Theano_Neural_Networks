@@ -470,8 +470,6 @@ def train_lstm(
         weight_decay *= decay_c
         cost += weight_decay
     '''
-    print("lstm_b is :::::")
-    print(tparams['lstm_b'].get_value())
     f_cost = theano.function([x, mask, y], cost, name='f_cost')
 
     grads = tensor.grad(cost, wrt=list(tparams.values()))
@@ -493,8 +491,7 @@ def train_lstm(
     history_errs = []
     best_p = None
     bad_count = 0
-    print("lstm_b is :::::::::::::::")
-    print(tparams['lstm_b'].get_value())
+
     uidx = 0  # the number of update done
     estop = False  # early stop
     start_time = time.time()
@@ -514,6 +511,13 @@ def train_lstm(
                 print(x)
                 print("word embedding is:")
                 print(tparams['Wemb'].get_value())
+                print("lstm_W")
+                print(tparams['lstm_W'].get_value())
+                print("lstm_b")
+                print(tparams['lstm_b'].get_value())
+                print("lstm_U")
+                print(tparams['lstm_U'].get_value())
+                
                 # Get the data in numpy.ndarray format
                 # This swap the axis!
                 # Return something of shape (minibatch maxlen, n samples)
@@ -524,12 +528,7 @@ def train_lstm(
 
                 cost = f_grad_shared(x, mask, y)
                 f_update(lrate)
-                print("lstm_W")
-                print(tparams['lstm_W'].get_value())
-                print("lstm_b")
-                print(tparams['lstm_b'].get_value())
-                print("lstm_U")
-                print(tparams['lstm_U'].get_value())
+
 
                 move_on = int(raw_input("moving on? 1/0"))
                 if move_on==0:
