@@ -6,21 +6,22 @@ import gzip
 import os
 
 import numpy
-import theano
+
 
 
 def prepare_data(seqs, labels, maxlen=None):
     """Create the matrices from the datasets.
 
-    This pad each sequence to the same lenght: the lenght of the
-    longuest sequence or maxlen.
+    This pad each sequence to the same length: the length of the
+    longest sequence or maxlen.
 
     if maxlen is set, we will cut all sequence to this maximum
-    lenght.
+    length.
 
-    This swap the axis!
+    This swaps the axis!
     """
     # x: a list of sentences
+
     lengths = [len(s) for s in seqs]
 
     if maxlen is not None:
@@ -38,12 +39,14 @@ def prepare_data(seqs, labels, maxlen=None):
 
         if len(lengths) < 1:
             return None, None, None
-
+    
+    
     n_samples = len(seqs)
     maxlen = numpy.max(lengths)
-
+    
+    # columns are the samples in R^maxlen
     x = numpy.zeros((maxlen, n_samples)).astype('int64')
-    x_mask = numpy.zeros((maxlen, n_samples)).astype(theano.config.floatX)
+    x_mask = numpy.zeros((maxlen, n_samples)).astype(numpy.float32)
     for idx, s in enumerate(seqs):
         x[:lengths[idx], idx] = s
         x_mask[:lengths[idx], idx] = 1.
@@ -117,7 +120,11 @@ def load_data(path="imdb.pkl", n_words=100000, valid_portion=0.1, maxlen=None,
 
     train_set = pickle.load(f)
     test_set = pickle.load(f)
+    #train_set is a tuple containin two lists
+    #train_set[0] is a list containing 25000 lists
+    #train_set[1] is a list of integers from {0,1} representing the corresponding sentiments
     f.close()
+
     if maxlen:
         new_train_set_x = []
         new_train_set_y = []
@@ -125,11 +132,14 @@ def load_data(path="imdb.pkl", n_words=100000, valid_portion=0.1, maxlen=None,
             if len(x) < maxlen:
                 new_train_set_x.append(x)
                 new_train_set_y.append(y)
+        # maxlen being not none makes this function ignore lists in train_set[0] of length > maxlen
         train_set = (new_train_set_x, new_train_set_y)
+        #deleting the temporary lists
         del new_train_set_x, new_train_set_y
 
     # split training set into validation set
     train_set_x, train_set_y = train_set
+    #n_samples is the number of datapoints in train_set_x
     n_samples = len(train_set_x)
     sidx = numpy.random.permutation(n_samples)
     n_train = int(numpy.round(n_samples * (1. - valid_portion)))
