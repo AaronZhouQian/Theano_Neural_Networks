@@ -85,6 +85,8 @@ def init_params(options):
     params['U'] = 0.01 * numpy.random.randn(options['dim_proj'],
                                             options['ydim']).astype(config.floatX)
     params['b'] = numpy.zeros((options['ydim'],)).astype(config.floatX)
+    print("lstm_b is:::")
+    print (params['b'])
 
     return params
 
