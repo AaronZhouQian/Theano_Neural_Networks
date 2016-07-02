@@ -103,7 +103,7 @@ def init_tparams(params):
     tparams = OrderedDict()
     for kk, pp in params.items():
         tparams[kk] = theano.shared(params[kk], name=kk)
-        if kk=='lstm_b'
+        if kk=='lstm_b':
             print("in init_tparams")
             print("lstm_b is :::")
             print (params['lstm_b'])
