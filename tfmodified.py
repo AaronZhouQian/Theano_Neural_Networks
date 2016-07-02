@@ -532,13 +532,13 @@ def train_lstm(
                 print("mask is")
                 print(mask)
                 print("x.shape[1] is",x.shape[1])
-                
+
                 n_samples += x.shape[1]
 
                 cost = f_grad_shared(x, mask, y)
                 f_update(lrate)
 
-
+                pred_error(f_pred, prepare_data, train, kf_train_sorted)
                 move_on = int(raw_input("moving on? 1/0"))
                 if move_on==0:
                     break
