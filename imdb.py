@@ -45,7 +45,7 @@ def prepare_data(seqs, labels, maxlen=None):
     maxlen = numpy.max(lengths)
     
     # columns are the samples in R^maxlen
-    x = numpy.zeros((maxlen, n_samples)).astype('int64')
+    x = numpy.zeros((maxlen, n_samples)).astype(numpy.float32)
     x_mask = numpy.zeros((maxlen, n_samples)).astype(numpy.float32)
     for idx, s in enumerate(seqs):
         x[:lengths[idx], idx] = s
