@@ -401,6 +401,7 @@ def pred_error(f_pred, prepare_data, data, iterator, verbose=False):
     f_pred: Theano fct computing the prediction
     prepare_data: usual prepare_data for that dataset.
     """
+    total=0
     valid_err = 0
     for _, valid_index in iterator:
         x, mask, y = prepare_data([data[0][t] for t in valid_index],
@@ -409,8 +410,11 @@ def pred_error(f_pred, prepare_data, data, iterator, verbose=False):
         preds = f_pred(x, mask)
         targets = numpy.array(data[1])[valid_index]
         valid_err += (preds == targets).sum()
-    valid_err = 1. - numpy_floatX(valid_err) / len(data[0])
 
+        total=total+len(targets)
+
+    #valid_err = 1. - numpy_floatX(valid_err) / len(data[0])
+    valid_err = 1.- numpy_floatX(valid_err)/total
     return valid_err
 
 
