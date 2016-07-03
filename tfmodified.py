@@ -537,10 +537,10 @@ def train_lstm(
 
                 cost = f_grad_shared(x, mask, y)
 
-                kf_train_sorted = get_minibatches_idx(len(train[0]), batch_size)
-                print(list(train_index))
+
+                print([list(train_index)])
                 print("training error:")
-                print(pred_error(f_pred, prepare_data, train, [list(train_index)]))
+                print(pred_error(f_pred, prepare_data, train, zip(( len(list(train_index)), list(train_index)  ) ) ) )
 
                 f_update(lrate)
                 move_on = int(raw_input("moving on? 1/0"))
