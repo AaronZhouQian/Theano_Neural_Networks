@@ -540,8 +540,8 @@ def train_lstm(
                 print(train_index)
                 print(type(train_index))
                 print([list(train_index) ] )
-                print("training error:")
-                print(pred_error(f_pred, prepare_data, train, enumerate([list(train_index) ]  )) )
+                print("training accuracy:")
+                print(1-pred_error(f_pred, prepare_data, train, enumerate([list(train_index) ]  )) )
 
                 f_update(lrate)
                 move_on = int(raw_input("moving on? 1/0"))
