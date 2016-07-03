@@ -538,9 +538,9 @@ def train_lstm(
                 cost = f_grad_shared(x, mask, y)
 
 
-                print(zip([0], list(train_index)  ) )
+                print([train_index ] )
                 print("training error:")
-                print(pred_error(f_pred, prepare_data, train, zip([0], list(train_index)  ) ) )
+                print(pred_error(f_pred, prepare_data, train, [train_index ]  ) )
 
                 f_update(lrate)
                 move_on = int(raw_input("moving on? 1/0"))
