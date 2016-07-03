@@ -536,9 +536,13 @@ def train_lstm(
                 n_samples += x.shape[1]
 
                 cost = f_grad_shared(x, mask, y)
-                f_update(lrate)
 
-                pred_error(f_pred, prepare_data, train, kf_train_sorted)
+                kf_train_sorted = get_minibatches_idx(len(train[0]), batch_size)
+                print(list(train_index))
+                print("training error:")
+                print(pred_error(f_pred, prepare_data, train, [list(train_index)]))
+
+                f_update(lrate)
                 move_on = int(raw_input("moving on? 1/0"))
                 if move_on==0:
                     break
