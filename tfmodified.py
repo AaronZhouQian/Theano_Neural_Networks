@@ -365,7 +365,7 @@ def build_model(tparams, options):
 
     pred = tensor.nnet.softmax(tensor.dot(proj, tparams['U']) + tparams['b'])
     f_pred_prob = theano.function([x, mask], pred, name='f_pred_prob')
-    f_pred = theano.function([x, mask], pred.argmax(axis=1), name='f_pred')
+    f_pred = theano.function([x, mask], pred.argmax(axis=1), name='f_pred',allow_input_downcast=True)
 
     cost = -tensor.log(pred[tensor.arange(n_samples), y] ).mean()
 
