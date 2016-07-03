@@ -541,13 +541,12 @@ def train_lstm(
                 print(type(train_index))
                 print([list(train_index) ] )
                 print("training error:")
-                print(pred_error(f_pred, prepare_data, train, [list(train_index) ]  ) )
+                print(pred_error(f_pred, prepare_data, train, enumerate([list(train_index) ]  )) )
 
                 f_update(lrate)
                 move_on = int(raw_input("moving on? 1/0"))
                 if move_on==0:
                     break
-
 
                 if numpy.mod(uidx, dispFreq) == 0:
                     print('Epoch ', eidx, 'Update ', uidx, 'Cost ', cost)
