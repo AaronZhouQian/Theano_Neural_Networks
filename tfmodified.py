@@ -499,6 +499,7 @@ def train_lstm(
     uidx = 0  # the number of update done
     estop = False  # early stop
     start_time = time.time()
+    counter=0
     try:
         for eidx in range(max_epochs):
             n_samples = 0
@@ -548,9 +549,12 @@ def train_lstm(
                 print(1-pred_error(f_pred, prepare_data, train, enumerate([list(train_index) ]  )) )
 
                 f_update(lrate)
-                move_on = int(raw_input("moving on? 1/0"))
-                if move_on==0:
-                    break
+
+                counter+=1
+                if counter%50==0:
+                    move_on = int(raw_input("moving on? 1/0"))
+                    if move_on==0:
+                        break
 
                 if numpy.mod(uidx, dispFreq) == 0:
                     print('Epoch ', eidx, 'Update ', uidx, 'Cost ', cost)
