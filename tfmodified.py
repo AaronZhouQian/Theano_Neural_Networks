@@ -512,16 +512,16 @@ def train_lstm(
                 # Select the random examples for this minibatch
                 y = [train[1][t] for t in train_index]
                 x = [train[0][t] for t in train_index]
-                print("x is: ")
-                print(x)
-                print("word embedding is:")
-                print(tparams['Wemb'].get_value())
+                #print("x is: ")
+                #print(x)
+                #print("word embedding is:")
+                #print(tparams['Wemb'].get_value())
                 print("lstm_W")
                 print(tparams['lstm_W'].get_value())
-                print("lstm_b")
-                print(tparams['lstm_b'].get_value())
-                print("lstm_U")
-                print(tparams['lstm_U'].get_value())
+                #print("lstm_b")
+               # print(tparams['lstm_b'].get_value())
+               # print("lstm_U")
+                #print(tparams['lstm_U'].get_value())
 
                 # Get the data in numpy.ndarray format
                 # This swap the axis!
@@ -529,22 +529,22 @@ def train_lstm(
 
                 x, mask, y = prepare_data(x, y) # x is (maxlen x n_samples)
                                                 # the rows of x are sentences
-                print("after preparing the data")
-                print("x is")
-                print(x)
-                print("y is")
-                print(y)
-                print("mask is")
-                print(mask)
-                print("x.shape[1] is",x.shape[1])
+                #print("after preparing the data")
+                #print("x is")
+                #print(x)
+                #print("y is")
+                #print(y)
+                #print("mask is")
+                #print(mask)
+                #print("x.shape[1] is",x.shape[1])
 
                 n_samples += x.shape[1]
 
                 cost = f_grad_shared(x, mask, y)
 
-                print(train_index)
-                print(type(train_index))
-                print([list(train_index) ] )
+                #print(train_index)
+                #print(type(train_index))
+                #print([list(train_index) ] )
                 print("training accuracy:")
                 print(1-pred_error(f_pred, prepare_data, train, enumerate([list(train_index) ]  )) )
 
