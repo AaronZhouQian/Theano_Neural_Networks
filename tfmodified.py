@@ -452,7 +452,7 @@ def train_lstm(
     prepare_data = imdb.prepare_data
 
     print('Loading data')
-    train, valid, test = load_data(n_words=n_words, valid_portion=0.05, maxlen=maxlen)
+    train, valid, test = load_data(n_words=n_words, validation_portion=0.05, maxlen=maxlen)
     model_options['ydim'] = 2
 
     print('Building model')
