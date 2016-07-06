@@ -11,7 +11,8 @@ from theano import config
 import theano.tensor as tensor
 from theano.sandbox.rng_mrg import MRG_RandomStreams as RandomStreams
 
-import imdb
+import imdb2
+imdb=imdb2
 
 datasets = {'imdb': (imdb.load_data, imdb.prepare_data)}
 # Set the random number generators' seeds for consistency
