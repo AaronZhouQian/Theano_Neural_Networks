@@ -5,7 +5,8 @@ import six.moves.cPickle as pickle
 import gzip
 import os
 
-import numpy
+import numpy as np
+
 
 
 
