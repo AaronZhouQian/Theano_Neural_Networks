@@ -7,10 +7,7 @@ import os
 
 import numpy as np
 
-
-
-
-def prepare_data(seqs, labels, maxlen=None):
+def prepare_data(seqs, labels, MAXLEN_to_pad_to, maxlen=None):
     """Create the matrices from the datasets.
 
     This pad each sequence to the same length: the length of the
@@ -22,7 +19,8 @@ def prepare_data(seqs, labels, maxlen=None):
     This swaps the axis!
     """
     # x: a list of sentences
-
+    if (maxlen is not None) and maxlen>MAXLEN_to_pad_to:
+        raise ValueError("maxlen should be less than MAXLEN_to_pad_to. maxlen = %d MAXLEN_to_pad_to = %d "%(maxlen,MAXLEN_to_pad_to))
     lengths = [len(s) for s in seqs]
 
     if maxlen is not None:
@@ -40,14 +38,11 @@ def prepare_data(seqs, labels, maxlen=None):
 
         if len(lengths) < 1:
             return None, None, None
-    
-    
+
     n_samples = len(seqs)
-    maxlen = np.max(lengths)
-    
     # columns are the samples in R^maxlen
-    x = np.zeros((maxlen, n_samples)).astype(np.float32)
-    x_mask = np.zeros((maxlen, n_samples)).astype(np.float32)
+    x = np.zeros((MAXLEN_to_pad_to, n_samples)).astype(np.int64)
+    x_mask = np.zeros((MAXLEN_to_pad_to, n_samples)).astype(np.float32)
     for idx, s in enumerate(seqs):
         x[:lengths[idx], idx] = s
         x_mask[:lengths[idx], idx] = 1.
