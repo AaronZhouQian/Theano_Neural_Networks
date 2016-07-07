@@ -529,7 +529,7 @@ def train_lstm(
                 # Return something of shape (minibatch maxlen, n samples)
 
                 x, mask, y = prepare_data(x, y) # x is (maxlen x n_samples)
-                                                # the rows of x are sentences
+                print("x.shape ",x.shape)                                 # the rows of x are sentences
                 #print("after preparing the data")
                 #print("x is")
                 #print(x)
@@ -561,7 +561,9 @@ def train_lstm(
                     print('Epoch ', eidx, 'Update ', uidx, 'Cost ', cost)
 
             print('Seen %d samples' % n_samples)
-
+            if counter==20:
+                total_time = time.time()-start_time
+                print("total time taken is: ", total_time)
             if estop:
                 break
 
