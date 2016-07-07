@@ -529,7 +529,7 @@ def train_lstm(
                 # Return something of shape (minibatch maxlen, n samples)
 
                 x, mask, y = prepare_data(x, y) # x is (maxlen x n_samples)
-                print("x.shape ",x.shape)                                 # the rows of x are sentences
+                                 # the rows of x are sentences
                 #print("after preparing the data")
                 #print("x is")
                 #print(x)
