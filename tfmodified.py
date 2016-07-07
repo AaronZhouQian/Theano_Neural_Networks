@@ -503,7 +503,7 @@ def train_lstm(
     counter=0
     try:
         for eidx in range(max_epochs):
-        counter+=1
+            counter+=1
             n_samples = 0
 
             # Get new shuffled index for the training set.
