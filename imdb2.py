@@ -7,7 +7,7 @@ import os
 
 import numpy as np
 
-def prepare_data(seqs, labels, MAXLEN_to_pad_to, maxlen=None):
+def prepare_data(seqs, labels, MAXLEN_to_pad_to=100, maxlen=None):
     """Create the matrices from the datasets.
 
     This pad each sequence to the same length: the length of the
