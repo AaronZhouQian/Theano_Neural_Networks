@@ -337,8 +337,8 @@ def lstm_layer(tparams, state_below, options, prefix='lstm', mask=None):
         return s_t
 
 
-    state_below = (tensor.dot(state_below, tparams[_p(prefix, 'W')]) +
-                   tparams[_p(prefix, 'b')])
+    #state_below = (tensor.dot(state_below, tparams[_p(prefix, 'W')]) +
+    #              tparams[_p(prefix, 'b')])
     # state_below (maxlen, n_samples, dim_proj)
     dim_proj = options['dim_proj']
     h_and_c, updates = theano.scan(_step,
