@@ -461,6 +461,8 @@ def train_lstm(
     print('Loading data')
     train, valid, test = load_data(n_words=n_words, validation_portion=0.05, maxlen=maxlen)
     max_sentence_length_for_testing = model_options['max_sentence_length_for_testing']
+    new_test_features = []
+    new_test_labels = []
     for feature, label in zip(test[0], test[1]):
         if len(feature) < max_sentence_length_for_testing:
             new_test_features.append(feature)
