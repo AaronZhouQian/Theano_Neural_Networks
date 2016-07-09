@@ -519,68 +519,76 @@ def train_lstm(
     counter=0
     try:
         for eidx in range(max_epochs):
-            counter+=1
             n_samples = 0
 
             # Get new shuffled index for the training set.
-            kf = get_minibatches_idx(len(train[0]), batch_size, shuffle=False)
+            kf = get_minibatches_idx(len(train[0]), batch_size, shuffle=True)
 
             for _, train_index in kf:
                 uidx += 1
+                use_noise.set_value(1.)
+
                 # Select the random examples for this minibatch
                 y = [train[1][t] for t in train_index]
-                x = [train[0][t] for t in train_index]
-                #print("x is: ")
-                #print(x)
-                #print("word embedding is:")
-                #print(tparams['Wemb'].get_value())
-                #print("lstm_W")
-                #print(tparams['lstm_W'].get_value())
-                #print("lstm_b")
-               # print(tparams['lstm_b'].get_value())
-               # print("lstm_U")
-                #print(tparams['lstm_U'].get_value())
+                x = [train[0][t]for t in train_index]
 
                 # Get the data in numpy.ndarray format
                 # This swap the axis!
                 # Return something of shape (minibatch maxlen, n samples)
-
-                x, mask, y = prepare_data(x, y) # x is (maxlen x n_samples)
-                                 # the rows of x are sentences
-                #print("after preparing the data")
-                #print("x is")
-                #print(x)
-                #print("y is")
-                #print(y)
-                #print("mask is")
-                #print(mask)
-                #print("x.shape[1] is",x.shape[1])
-
+                x, mask, y = prepare_data(x, y)
                 n_samples += x.shape[1]
 
                 cost = f_grad_shared(x, mask, y)
-
-                #print(train_index)
-                #print(type(train_index))
-                #print([list(train_index) ] )
-                #print("training accuracy:")
-                #print(1-pred_error(f_pred, prepare_data, train, enumerate([list(train_index) ]  )) )
-
                 f_update(lrate)
-                """
-                counter+=1
-                if counter%50==0:
-                    move_on = int(raw_input("moving on? 1/0"))
-                    if move_on==0:
-                        break
-                """
+
+                if numpy.isnan(cost) or numpy.isinf(cost):
+                    print('bad cost detected: ', cost)
+                    return 1., 1., 1.
+
                 if numpy.mod(uidx, dispFreq) == 0:
                     print('Epoch ', eidx, 'Update ', uidx, 'Cost ', cost)
 
+                if saveto and numpy.mod(uidx, saveFreq) == 0:
+                    print('Saving...')
+
+                    if best_p is not None:
+                        params = best_p
+                    else:
+                        params = unzip(tparams)
+                    numpy.savez(saveto, history_errs=history_errs, **params)
+                    pickle.dump(model_options, open('%s.pkl' % saveto, 'wb'), -1)
+                    print('Done')
+
+                if numpy.mod(uidx, validFreq) == 0:
+                    use_noise.set_value(0.)
+                    train_err = pred_error(f_pred, prepare_data, train, kf)
+                    valid_err = pred_error(f_pred, prepare_data, valid,
+                                           kf_valid)
+                    test_err = pred_error(f_pred, prepare_data, test, kf_test)
+
+                    history_errs.append([valid_err, test_err])
+
+                    if (best_p is None or
+                        valid_err <= numpy.array(history_errs)[:,
+                                                               0].min()):
+
+                        best_p = unzip(tparams)
+                        bad_counter = 0
+
+                    print( ('Train ', train_err, 'Valid ', valid_err,
+                           'Test ', test_err) )
+
+                    if (len(history_errs) > patience and
+                        valid_err >= numpy.array(history_errs)[:-patience,
+                                                               0].min()):
+                        bad_counter += 1
+                        if bad_counter > patience:
+                            print('Early Stop!')
+                            estop = True
+                            break
+
             print('Seen %d samples' % n_samples)
-            if counter==20:
-                total_time = time.time()-start_time
-                print("total time taken is: ", total_time)
+
             if estop:
                 break
 
@@ -593,14 +601,17 @@ def train_lstm(
     else:
         best_p = unzip(tparams)
 
-
+    use_noise.set_value(0.)
     kf_train_sorted = get_minibatches_idx(len(train[0]), batch_size)
     train_err = pred_error(f_pred, prepare_data, train, kf_train_sorted)
     valid_err = pred_error(f_pred, prepare_data, valid, kf_valid)
     test_err = pred_error(f_pred, prepare_data, test, kf_test)
 
     print( 'Train ', train_err, 'Valid ', valid_err, 'Test ', test_err )
-
+    if saveto:
+        numpy.savez(saveto, train_err=train_err,
+                    valid_err=valid_err, test_err=test_err,
+                    history_errs=history_errs, **best_p)
     print('The code run for %d epochs, with %f sec/epochs' % (
         (eidx + 1), (end_time - start_time) / (1. * (eidx + 1))))
     print( ('Training took %.1fs' %
@@ -610,4 +621,7 @@ def train_lstm(
 
 if __name__ == '__main__':
     # See function train for all possible parameter and there definition.
-    train_lstm( max_epochs=100, test_size=500)
+    train_lstm(
+        max_epochs=100,
+        test_size=500,
+    )
