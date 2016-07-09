@@ -311,8 +311,8 @@ def lstm_layer(tparams, state_below, options, prefix='lstm', mask=None):
 
     def _step(input,cell_previous):
 
-        lstm_W = params['lstm_W']
-        lstm_U = params['lstm_U']
+        lstm_W = tparams['lstm_W']
+        lstm_U = tparams['lstm_U']
 
         temp_W = lstm_W[:,:dim_proj*2]
         temp_U = lstm_U[:,:dim_proj*2]
