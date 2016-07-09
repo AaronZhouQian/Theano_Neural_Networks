@@ -324,7 +324,7 @@ def lstm_layer(tparams, state_below, options, prefix='lstm', mask=None):
         z = z_r[:,:dim_proj]
         r = z_r[:,dim_proj:]
 
-        h = tf.tanh(tensor.dot(input, temp_U_h) + tensor.dot(cell_previous* r, temp_W_h))
+        h = tensor.tanh(tensor.dot(input, temp_U_h) + tensor.dot(cell_previous* r, temp_W_h))
         s_t = ((1 - z)* h) + (z*cell_previous)
 
         """
