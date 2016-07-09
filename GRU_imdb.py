@@ -316,15 +316,17 @@ def lstm_layer(tparams, state_below, options, prefix='lstm', mask=None):
 
         temp_W = lstm_W[:,:dim_proj*2]
         temp_U = lstm_U[:,:dim_proj*2]
+        temp_b = tparams['lstm_b'][:dim_proj*2]
 
         temp_U_h =lstm_U[:,dim_proj*2:]
         temp_W_h =lstm_U[:,dim_proj*2:]
+        temp_b_h = tparams['lstm_b'][dim_proj*2:]
 
-        z_r = tensor.nnet.sigmoid(tensor.dot(input, temp_U) + tensor.dot(cell_previous, temp_W))
+        z_r = tensor.nnet.sigmoid(tensor.dot(input, temp_U) + tensor.dot(cell_previous, temp_W)+temp_b)
         z = z_r[:,:dim_proj]
         r = z_r[:,dim_proj:]
 
-        h = tensor.tanh(tensor.dot(input, temp_U_h) + tensor.dot(cell_previous* r, temp_W_h))
+        h = tensor.tanh(tensor.dot(input, temp_U_h) + tensor.dot(cell_previous* r, temp_W_h)+temp_b_h)
         s_t = ((1 - z)* h) + (z*cell_previous)
 
         """
