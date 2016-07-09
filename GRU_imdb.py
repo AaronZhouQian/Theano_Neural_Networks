@@ -124,8 +124,8 @@ def param_init_lstm(options, params, prefix='lstm'):
     params[_p(prefix, 'W')] = W
 
     U = numpy.concatenate([ortho_weight(options['dim_proj']),
-                       ortho_weight(options['dim_proj']),
-                       ortho_weight(options['dim_proj'])], axis=1)
+                           ortho_weight(options['dim_proj']),
+                           ortho_weight(options['dim_proj'])], axis=1)
     params[_p(prefix, 'U')] = U
 
     b = numpy.zeros((3 * options['dim_proj'],))
@@ -310,7 +310,7 @@ def lstm_layer(tparams, state_below, options, prefix='lstm', mask=None):
         return _x[:, n * dim:(n + 1) * dim]
 
     def _step(input,cell_previous):
-
+        dim_proj=options['dim_proj']
         lstm_W = tparams['lstm_W']
         lstm_U = tparams['lstm_U']
 
@@ -364,7 +364,6 @@ def build_model(tparams, options):
     emb = tparams['Wemb'][x.flatten()].reshape([maxlen, n_samples, options['dim_proj']])
     #lstm_layer
     proj = lstm_layer(tparams, emb, options, prefix=options['encoder'], mask=mask)
-
 
     proj = (proj * mask[:, :, None]).sum(axis=0)   # resulting dim is (n_samples x dim_proj)
     proj = proj / mask.sum(axis=0)[:, None]
