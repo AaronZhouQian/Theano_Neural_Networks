@@ -467,7 +467,7 @@ def train_lstm(
         if len(feature) < max_sentence_length_for_testing:
             new_test_features.append(feature)
             new_test_labels.append(label)
-    test_data = (new_test_features, new_test_labels)
+    test = (new_test_features, new_test_labels)
     del new_test_features, new_test_labels
     model_options['ydim'] = 2
 
