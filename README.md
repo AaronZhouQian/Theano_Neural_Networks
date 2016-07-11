@@ -1,4 +1,6 @@
-Theano Tutorial on LSTM
+This repo contains the original tutorial code from http://deeplearning.net/tutorial/lstm.html#lstm
+as well as Theano code for other neural network models, the code for which are written partially based
+on the original tutorial code.
 
 Citation:
 Introduction of the LSTM model:
