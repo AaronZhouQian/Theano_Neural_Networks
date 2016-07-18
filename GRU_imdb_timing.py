@@ -525,12 +525,12 @@ def train_lstm(
             # Get new shuffled index for the training set.
             kf = get_minibatches_idx(len(train[0]), batch_size, shuffle=True)
 
-            for _, train_index in kf:
+            for i in [0]:
                 uidx += 1
 
                 # Select the random examples for this minibatch
-                y = [train[1][t] for t in train_index]
-                x = [train[0][t]for t in train_index]
+                y = train[1]
+                x = train[0]
 
                 # Get the data in numpy.ndarray format
                 # This swap the axis!
