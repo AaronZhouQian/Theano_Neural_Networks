@@ -428,7 +428,7 @@ def pred_error(f_pred, prepare_data, data, iterator, verbose=False):
 def train_lstm(
     dim_proj=128,  # word embeding dimension and LSTM number of hidden units.
     patience=10,  # Number of epoch to wait before early stop if no progress
-    max_epochs=20,  # The maximum number of epoch to run
+    max_epochs=1000,  # The maximum number of epoch to run
     dispFreq=10,  # Display to stdout the training progress every N updates
     decay_c=0.,  # Weight decay for the classifier applied to the U weights.
     lrate=0.0001,  # Learning rate for sgd (not used for adadelta and rmsprop)
@@ -624,6 +624,5 @@ def train_lstm(
 if __name__ == '__main__':
     # See function train for all possible parameter and there definition.
     train_lstm(
-        max_epochs=100,
         test_size=500,
     )
